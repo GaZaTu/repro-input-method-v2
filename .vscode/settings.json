@@ -1,0 +1,8 @@
+{
+  "files.associations": {
+    "wayland-input-method-unstable-v2-client-protocol.h": "c",
+    "string.h": "c",
+    "array": "c",
+    "string_view": "c"
+  }
+}

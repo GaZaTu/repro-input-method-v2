@@ -1,6 +1,7 @@
 #include "wayland-input-method-unstable-v2-client-protocol.h"
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 struct registry_data_t {
   struct wl_seat* active_seat;
@@ -28,6 +29,9 @@ void handle_registry_listener_global_remove(void* data, struct wl_registry* regi
 }
 
 int main(void) {
+  printf("focus a different window now\n");
+  sleep(5);
+
   struct registry_data_t registry_data;
   registry_data.active_seat = NULL;
   registry_data.input_method_manager_v2 = NULL;

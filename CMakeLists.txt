@@ -27,6 +27,11 @@ if (${WaylandScanner_FOUND})
     PROTOCOL ${PROJECT_SOURCE_DIR}/src/wayland-protocols/wlroots/input-method-unstable-v2.xml
     BASENAME input-method-unstable-v2
   )
+
+  ecm_add_wayland_client_protocol(SRC_FILES
+    PROTOCOL ${PROJECT_SOURCE_DIR}/src/wayland-protocols/unstable/text-input/text-input-unstable-v3.xml
+    BASENAME text-input-unstable-v3
+  )
 endif ()
 
 add_executable(${PROJECT_NAME} ${SRC_FILES})

@@ -82,6 +82,44 @@ void handle_registry_listener_global_remove(void* data, struct wl_registry* regi
 //   printf("handle_text_input_v3_listener_done\n");
 // }
 
+struct keyboard_grab_v2_listener_data_t {
+  int placeholder;
+};
+
+void keyboard_grab_v2_listener_keymap(void *data,
+		       struct zwp_input_method_keyboard_grab_v2 *zwp_input_method_keyboard_grab_v2,
+		       uint32_t format,
+		       int32_t fd,
+		       uint32_t size) {
+  printf("keyboard_grab_v2_listener_keymap\n");
+}
+
+void keyboard_grab_v2_listener_key(void *data,
+		    struct zwp_input_method_keyboard_grab_v2 *zwp_input_method_keyboard_grab_v2,
+		    uint32_t serial,
+		    uint32_t time,
+		    uint32_t key,
+		    uint32_t state) {
+  printf("keyboard_grab_v2_listener_key\n");
+}
+
+void keyboard_grab_v2_listener_modifiers(void *data,
+			  struct zwp_input_method_keyboard_grab_v2 *zwp_input_method_keyboard_grab_v2,
+			  uint32_t serial,
+			  uint32_t mods_depressed,
+			  uint32_t mods_latched,
+			  uint32_t mods_locked,
+			  uint32_t group) {
+  printf("keyboard_grab_v2_listener_modifiers\n");
+}
+
+void keyboard_grab_v2_listener_repeat_info(void *data,
+			    struct zwp_input_method_keyboard_grab_v2 *zwp_input_method_keyboard_grab_v2,
+			    int32_t rate,
+			    int32_t delay) {
+  printf("keyboard_grab_v2_listener_repeat_info\n");
+}
+
 int main(void) {
   printf("focus a different window now\n");
   sleep(5);
@@ -116,8 +154,16 @@ int main(void) {
   }
 
   if (registry_listener_data.input_method_v2_manager) {
-    struct zwp_input_method_v2* input_method_v2 = zwp_input_method_manager_v2_get_input_method(
+    struct zwp_input_method_v2* input_method = zwp_input_method_manager_v2_get_input_method(
         registry_listener_data.input_method_v2_manager, registry_listener_data.active_seat);
+
+    // struct zwp_input_method_keyboard_grab_v2* keyboard_grab = zwp_input_method_v2_grab_keyboard(input_method);
+
+    // struct zwp_input_method_keyboard_grab_v2_listener keyboard_grab_listener = {0};
+    // keyboard_grab_listener.keymap = &keyboard_grab_v2_listener_keymap;
+    // keyboard_grab_listener.key = &keyboard_grab_v2_listener_key;
+    // keyboard_grab_listener.repeat_info = &keyboard_grab_v2_listener_repeat_info;
+    // keyboard_grab_listener.modifiers = &keyboard_grab_v2_listener_modifiers;
 
     printf("dispatch zwp_input_method_v2\n");
     wl_display_dispatch(display);
@@ -127,14 +173,16 @@ int main(void) {
 
     printf("created zwp_input_method_v2\n");
 
-    zwp_input_method_v2_commit_string(input_method_v2, "👌");
-    zwp_input_method_v2_commit(input_method_v2, 0);
+    zwp_input_method_v2_commit_string(input_method, "👌");
+    zwp_input_method_v2_commit(input_method, 0);
 
     printf("dispatch commit_string\n");
     wl_display_dispatch(display);
 
     printf("roundtrip commit_string\n");
     wl_display_roundtrip(display);
+
+    // zwp_input_method_keyboard_grab_v2_release(keyboard_grab);
 
     printf("DONE\n");
     return 0;
